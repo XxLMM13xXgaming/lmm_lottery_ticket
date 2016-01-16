@@ -98,6 +98,8 @@ net.Receive( "LMMLOpenTicket", function()
 			menu:Remove()
 			gui.EnableScreenClicker( true )
 			ViewTicket()
+			net.Start("LMMLRemoveMoney")
+			net.SendToServer()
 		end
 	end
 	

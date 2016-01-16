@@ -1,12 +1,11 @@
 util.AddNetworkString("LMMLOpenTicket")
+util.AddNetworkString("LMMLRemoveMoney")
 util.AddNetworkString("LMMLRewards")
 util.AddNetworkString("LMMLRewardsText")
 util.AddNetworkString("LMMLCoolDownText")
 
 function LMMLPutUserOnCoolDown(ply)
 	ply:SetNWBool("LMMLCoolDown", true)
-	local cooldown = ply:GetNWBool("LMMLCoolDown")
-	print("STARTED: "..tostring(cooldown))
 	timer.Create("LMMLCoolDownFor"..ply:SteamID64(), LMMLConfig.CoolDown, 1, function()
 		ply:SetNWBool("LMMLCoolDown", false)
 	end	)
@@ -14,9 +13,7 @@ end
 
 function LMMLCheckCoolDown(ply)
 	local cooldown = ply:GetNWBool("LMMLCoolDown")
-	
-	print(tostring(cooldown))
-	
+		
 	if cooldown == true then
 		return true
 	elseif cooldown == false then
@@ -42,6 +39,17 @@ function SendLotteryTicket(ply)
 		net.WriteFloat(answer3)
 	net.Send(ply)
 	
+	net.Receive("LMMLRemoveMoney", function( len, theply )
+		if theply != ply then
+			if LMMLConfig.AutoBanExploiters then
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
+			end
+			return
+		else
+			theply:addMoney(-LMMLConfig.PriceForTicket)
+		end
+	end)
+	
 	net.Receive("LMMLRewards", function( len, ply )
 		winners = 0
 		local clnum1 = net.ReadFloat()
@@ -54,42 +62,42 @@ function SendLotteryTicket(ply)
 		
 		if clnum1 != num1 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end
 		
 		if clnum2 != num2 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end		
 		
 		if clnum3 != num3 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end	
 
 		if clans1 != answer1 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end	
 
 		if clans2 != answer2 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end	
 
 		if clans3 != answer3 then
 			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "ban", ply, "0", "Attempting to use exploits on the lottery addon")
+				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end	

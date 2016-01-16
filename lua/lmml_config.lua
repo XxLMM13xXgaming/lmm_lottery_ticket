@@ -1,5 +1,5 @@
 LMMLConfig = {}
-LMMLConfig.DevMode = true
+LMMLConfig.DevMode = false
 /*
   _      __  __ __  __   _           _   _                    _______ _      _        _       
  | |    |  \/  |  \/  | | |         | | | |                  |__   __(_)    | |      | |      
@@ -32,3 +32,4 @@ LMMLConfig.RewardMatch3 = 10000 -- The amount of money won for matching 3 number
 LMMLConfig.CoolDown = 120 -- The amount of time (in sec) a player has to wait to buy another ticket
 
 LMMLConfig.AutoBanExploiters = true -- THIS ONLY WORKS FOR ULX IF YOU DO NOT USE ULX DO NOT USE THIS
+-- If a player tries to use exploits with this addon he/she will be auto banned (ulx banid <players id> Attempting to use exploits on the lottery addon)
