@@ -94,12 +94,17 @@ net.Receive( "LMMLOpenTicket", function()
 			draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 125))
 		end
 		BuyTicketBtn.DoClick = function()
-			menu:Close()
-			menu:Remove()
-			gui.EnableScreenClicker( true )
-			ViewTicket()
-			net.Start("LMMLRemoveMoney")
-			net.SendToServer()
+			local money = LocalPlayer():getDarkRPVar("money")
+			if money >= LMMLConfig.PriceForTicket then
+				menu:Close()
+				menu:Remove()
+				gui.EnableScreenClicker( true )			
+				ViewTicket()
+				net.Start("LMMLRemoveMoney")
+				net.SendToServer()	
+			else
+				chat.AddText(Color(255,0,0), "You do not have enough money!")
+			end
 		end
 	end
 	
