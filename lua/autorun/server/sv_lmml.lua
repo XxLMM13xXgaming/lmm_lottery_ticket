@@ -46,7 +46,11 @@ function SendLotteryTicket(ply)
 			end
 			return
 		else
-			theply:addMoney(-LMMLConfig.PriceForTicket)
+			if theply:getDarkRPVar("money") > LMMLConfig.PriceForTicket then
+				theply:addMoney(-LMMLConfig.PriceForTicket)
+			else
+				theply:ChatPrint("You do not have enough money!")
+			end
 		end
 	end)
 	
