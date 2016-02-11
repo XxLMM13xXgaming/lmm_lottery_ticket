@@ -12,13 +12,7 @@ function LMMLPutUserOnCoolDown(ply)
 end
 
 function LMMLCheckCoolDown(ply)
-	local cooldown = ply:GetNWBool("LMMLCoolDown")
-		
-	if cooldown == true then
-		return true
-	elseif cooldown == false then
-		return false
-	end
+	return ply:GetNWBool("LMMLCoolDown", false)
 end
 
 function SendLotteryTicket(ply)
@@ -40,7 +34,7 @@ function SendLotteryTicket(ply)
 	net.Send(ply)
 	
 	net.Receive("LMMLRemoveMoney", function( len, theply )
-		if theply != ply then
+		if theply ~= ply then
 			if LMMLConfig.AutoBanExploiters then
 				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
@@ -55,56 +49,17 @@ function SendLotteryTicket(ply)
 	end)
 	
 	net.Receive("LMMLRewards", function( len, ply )
-		winners = 0
-		local clnum1 = net.ReadFloat()
-		local clnum2 = net.ReadFloat()
-		local clnum3 = net.ReadFloat()
 		
-		local clans1 = net.ReadFloat()
-		local clans2 = net.ReadFloat()
-		local clans3 = net.ReadFloat()
+		local winners = 0
+		local clnum1, clnum2, clnum3 = net.ReadFloat(), net.ReadFloat(), net.ReadFloat()
+		local clans1, clans2, clans3 = net.ReadFloat(), net.ReadFloat(), net.ReadFloat()
 		
-		if clnum1 != num1 then
+		if ( clnum1 ~= num1 or clnum2 ~= num2 or clnum3 ~= num3 or clans1 ~= answer1 or clans2 ~= answer2 or clans3 ~= answer3 ) or  then
 			if LMMLConfig.AutoBanExploiters then
 				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
 		end
-		
-		if clnum2 != num2 then
-			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
-			end
-			return
-		end		
-		
-		if clnum3 != num3 then
-			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
-			end
-			return
-		end	
-
-		if clans1 != answer1 then
-			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
-			end
-			return
-		end	
-
-		if clans2 != answer2 then
-			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
-			end
-			return
-		end	
-
-		if clans3 != answer3 then
-			if LMMLConfig.AutoBanExploiters then
-				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
-			end
-			return
-		end	
 
 		if clnum1 == answer1 then winners = winners + 1 end
 		if clnum2 == answer2 then winners = winners + 1 end
@@ -130,7 +85,7 @@ end
 
 function LMMLOpenMenu(ply, text)
 	local text = string.lower(text)
-	if(string.sub(text, 0, 100)== "!lottery") then
+	if ( string.sub( string.lower(text), 0, 7) == "!lottery" ) then
 		if not LMMLCheckCoolDown(ply) then
 			SendLotteryTicket(ply)
 		else
