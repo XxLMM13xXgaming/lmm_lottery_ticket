@@ -54,12 +54,12 @@ function SendLotteryTicket(ply)
 		local clnum1, clnum2, clnum3 = net.ReadFloat(), net.ReadFloat(), net.ReadFloat()
 		local clans1, clans2, clans3 = net.ReadFloat(), net.ReadFloat(), net.ReadFloat()
 		
-		if ( clnum1 ~= num1 or clnum2 ~= num2 or clnum3 ~= num3 or clans1 ~= answer1 or clans2 ~= answer2 or clans3 ~= answer3 ) or  then
+		if ( clnum1 ~= num1 or clnum2 ~= num2 or clnum3 ~= num3 or clans1 ~= answer1 or clans2 ~= answer2 or clans3 ~= answer3 ) then
 			if LMMLConfig.AutoBanExploiters then
 				RunConsoleCommand("ulx", "banid", ply:SteamID(), "0", "Attempting to use exploits on the lottery addon")
 			end
 			return
-		end
+		end 
 
 		if clnum1 == answer1 then winners = winners + 1 end
 		if clnum2 == answer2 then winners = winners + 1 end
